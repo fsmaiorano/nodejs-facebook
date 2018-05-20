@@ -17,6 +17,7 @@ module.exports = {
 
       return res.json(post);
     } catch (error) {
+      /* istanbul ignore next */
       return next(error);
     }
   },
@@ -33,6 +34,7 @@ module.exports = {
       }
       return res.send();
     } catch (error) {
+      /* istanbul ignore next */
       return next(error);
     }
   },

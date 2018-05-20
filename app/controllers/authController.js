@@ -21,7 +21,7 @@ module.exports = {
         user, token: user.generateToken(),
       });
     } catch (error) {
-      /* instanbul ignore next */
+      /* istanbul ignore next */
       return next(error);
     }
   },
@@ -38,7 +38,7 @@ module.exports = {
 
       return res.json({ user, token: user.generateToken() });
     } catch (error) {
-      /* instanbul ignore next */
+      /* istanbul ignore next */
       return next(error);
     }
   },

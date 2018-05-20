@@ -23,7 +23,7 @@ module.exports = {
 
       return res.json(post);
     } catch (error) {
-      /* instanbul ignore next */
+      /* istanbul ignore next */
       return next(error);
     }
   },

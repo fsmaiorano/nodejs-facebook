@@ -31,7 +31,7 @@ module.exports = {
 
       return res.status(400).json({ error: 'You\'re already your best friend. :)' });
     } catch (error) {
-      /* instanbul ignore next */
+      /* istanbul ignore next */
       return next(error);
     }
   },
@@ -54,11 +54,12 @@ module.exports = {
 
       const me = await User.findById(req.userId);
 
-      me.friends.splice(me.following.indexOf(user.id), 1);
+      me.friends.splice(me.friends.indexOf(user.id), 1);
       await me.save();
 
       return res.json(me);
     } catch (error) {
+      /* istanbul ignore next */
       return next(error);
     }
   },

@@ -10,7 +10,7 @@ const factory = require('../factories');
 
 const User = mongoose.model('User');
 
-describe('Friend', () => {
+describe('Create Friend', () => {
   beforeEach(async () => {
     await User.remove();
   });
@@ -59,14 +59,12 @@ describe('Friend', () => {
       .set('Authorization', `Bearer ${jwt}`)
       .send();
 
-    console.log(response.body);
-
     expect(response).to.have.status(400);
     expect(response.body).to.have.property('error');
   });
 
 
-  it('it should return already friends', async () => {
+  it('it should be able block add yourself', async () => {
     const user = await factory.create('User');
     const jwt = `${user.generateToken()}`;
 
@@ -74,6 +72,71 @@ describe('Friend', () => {
       .post(`/api/friend/${user.id}`)
       .set('Authorization', `Bearer ${jwt}`)
       .send();
+
+    expect(response).to.have.status(400);
+    expect(response.body).to.have.property('error');
+  });
+});
+
+describe('Destroy Friend', () => {
+  beforeEach(async () => {
+    await User.remove();
+  });
+
+  it('it should be remove a friend', async () => {
+    const user = await factory.create('User');
+    const user2 = await factory.create('User');
+    const jwt = `${user.generateToken()}`;
+
+    const newUser = await chai.request(app)
+      .post(`/api/friend/${user2.id}`)
+      .set('Authorization', `Bearer ${jwt}`)
+      .send();
+
+    const response = await chai.request(app)
+      .del(`/api/removefriend/${newUser.body.friends[0]}`)
+      .set('Authorization', `Bearer ${jwt}`)
+      .send();
+
+    expect(response.body.friends).to.not.include(user.id);
+  });
+
+  it('it should not find a user with id', async () => {
+    const user = await factory.create('User');
+    const jwt = `${user.generateToken()}`;
+
+    await User.remove();
+
+    const response = await chai.request(app)
+      .del(`/api/removefriend/${user.id}`)
+      .set('Authorization', `Bearer ${jwt}`)
+      .send();
+
+    expect(response).to.have.status(400);
+    expect(response.body).to.have.property('error');
+  });
+
+  it('it should return error of selected user is no your friend', async () => {
+    const user1 = await factory.create('User');
+    const jwt = user1.generateToken();
+
+    const user2 = await factory.create('User');
+
+    const newUser = await chai.request(app)
+      .post(`/api/friend/${user2.id}`)
+      .set('Authorization', `Bearer ${jwt}`)
+      .send();
+
+    await chai.request(app)
+      .del(`/api/removefriend/${newUser.body.friends[0]}`)
+      .set('Authorization', `Bearer ${jwt}`)
+      .send();
+
+    const response = await chai.request(app)
+      .del(`/api/removefriend/${newUser.body.friends[0]}`)
+      .set('Authorization', `Bearer ${jwt}`)
+      .send();
+
 
     expect(response).to.have.status(400);
     expect(response.body).to.have.property('error');

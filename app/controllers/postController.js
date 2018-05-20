@@ -1,4 +1,5 @@
 const mongoose = require('mongoose');
+
 const Post = mongoose.model('Post');
 
 module.exports = {
@@ -8,6 +9,7 @@ module.exports = {
       const post = await Post.create({ ...req.body, user: req.userId });
       return res.json(post);
     } catch (error) {
+      /* istanbul ignore next */
       return next(error);
     }
   },
@@ -17,6 +19,7 @@ module.exports = {
       await Post.findByIdAndRemove(req.params.id);
       return res.send();
     } catch (error) {
+      /* istanbul ignore next */
       return next(error);
     }
   },
