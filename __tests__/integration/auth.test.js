@@ -21,7 +21,6 @@ describe('Authentication', () => {
   describe('Sign up', () => {
     it('it should be able to sign up', async () => {
       const user = await factory.attrs('User');
-      // console.log(user);
       const response = await chai.request(app)
         .post('/api/signup')
         .send(user);

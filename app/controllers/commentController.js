@@ -24,13 +24,9 @@ module.exports = {
 
   async destroy(req, res, next) {
     try {
-      console.log(req.params.id)
       const post = await Post.findById(req.params.id);
-      console.log(post)
       const commented = post.comments.indexOf(req.userId);
-      console.log(commented)
       if (commented !== -1) {
-        console.log('entrei')
         post.comments.splice(commented, 1);
         post.save();
         res.send(post);
