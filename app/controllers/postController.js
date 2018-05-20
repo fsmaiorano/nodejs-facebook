@@ -18,6 +18,7 @@ module.exports = {
   async destroy(req, res, next) {
     try {
       await Post.findByIdAndRemove(req.params.id);
+      /* istanbul ignore next */
       return res.send();
     } catch (error) {
       /* istanbul ignore next */

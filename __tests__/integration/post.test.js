@@ -32,10 +32,16 @@ describe('Destroy Post', () => {
   it('it should delete a post', async () => {
     const user = await factory.create('User');
     const jwtToken = user.generateToken();
-    const response = await chai.request(app)
-      .del('/api/posts')
+
+    const newPost = await chai.request(app)
+      .post('/api/posts')
       .set('Authorization', `Bearer ${jwtToken}`)
       .send({ content: 'Criar Post' });
+
+    const response = await chai.request(app)
+      .del(`/api/posts/${newPost.body.id}`)
+      .set('Authorization', `Bearer ${jwtToken}`)
+      .send();
     expect(response.body).to.be.empty;
   });
 });
