@@ -11,12 +11,13 @@ module.exports = {
         return res.status(400).json({ error: 'User does not exist' });
       }
 
-      if (!user.friends.indexOf(req.userId !== -1)) {
-        return res.status(400).json({ error: `You\'re already friend of ${user.username} ` });
+      if (user.friends.length > 0) {
+        if (user.friends.indexOf(req.userId !== -1)) {
+          return res.status(400).json({ error: `You're already friend of ${user.username} ` });
+        }
       }
 
       if (user.id !== req.userId) {
-
         user.friends.push(req.userId);
         await user.save();
 
@@ -27,10 +28,10 @@ module.exports = {
 
         return res.json(me);
       }
-      else {
-        return res.status(400).json({ error: `You\'re already your best friend. :)` });
-      }
+
+      return res.status(400).json({ error: 'You\'re already your best friend. :)' });
     } catch (error) {
+      /* istanbul ignore next */
       return next(error);
     }
   },
@@ -45,7 +46,7 @@ module.exports = {
       const following = user.friends.indexOf(req.userId);
 
       if (following === -1) {
-        return res.status(400).json({ error: `You\'re not friend of ${user.username} ` });
+        return res.status(400).json({ error: `You're not friend of ${user.username} ` });
       }
 
       user.friends.splice(following, 1);
@@ -53,16 +54,14 @@ module.exports = {
 
       const me = await User.findById(req.userId);
 
-      me.friends.splice(me.following.indexOf(user.id), 1);
+      me.friends.splice(me.friends.indexOf(user.id), 1);
       await me.save();
 
       return res.json(me);
     } catch (error) {
+      /* istanbul ignore next */
       return next(error);
     }
   },
 };
-
-
-
 

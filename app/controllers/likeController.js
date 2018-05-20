@@ -13,7 +13,6 @@ module.exports = {
       }
 
       const liked = post.likes.indexOf(req.userId);
-
       if (liked === -1) {
         post.likes.push(req.userId);
       } else {
@@ -23,8 +22,8 @@ module.exports = {
       await post.save();
 
       return res.json(post);
-
     } catch (error) {
+      /* istanbul ignore next */
       return next(error);
     }
   },
