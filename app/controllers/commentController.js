@@ -7,7 +7,6 @@ module.exports = {
   async create(req, res, next) {
     try {
       const post = await Post.findById(req.params.id);
-
       if (!post) {
         return res.status(400).json({ error: 'Comment doesn\'t exist' });
       }
@@ -17,7 +16,6 @@ module.exports = {
       await post.save();
 
       return res.json(post);
-
     } catch (error) {
       return next(error);
     }
@@ -26,12 +24,11 @@ module.exports = {
   async destroy(req, res, next) {
     try {
       const post = await Post.findById(req.params.id);
-      let commented = post.comments.indexOf(req.userId);
+      const commented = post.comments.indexOf(req.userId);
       if (commented !== -1) {
         post.comments.splice(commented, 1);
         post.save();
-      }
-      else {
+      } else {
         return res.status(400).json({ error: 'Comment doesn\'t exist' });
       }
       return res.send();

@@ -13,7 +13,6 @@ module.exports = {
       }
 
       const liked = post.likes.indexOf(req.userId);
-      console.log(post.likes);
       if (liked === -1) {
         post.likes.push(req.userId);
       } else {

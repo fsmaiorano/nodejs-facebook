@@ -1,5 +1,4 @@
 const chai = require('chai');
-const sinon = require('sinon');
 const chaiHttp = require('chai-http');
 const mongoose = require('mongoose');
 
